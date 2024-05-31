@@ -17,6 +17,7 @@
     "ethers": "^6.11.1",
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.7.2",
+    "payshare": "link:PayShare",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

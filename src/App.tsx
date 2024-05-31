@@ -8,6 +8,8 @@ import useNetworkInfo from "./hooks/useNetworkInfo";
 import useTransactions from "./hooks/useTransactions";
 // import { createSwap } from "./services/tx";
 // import { Tx } from "./types";
+//import * as PayShare from '../PayShare/index.js'
+
 
 const NETWORK_FEE = 1;
 const SERVICE_FEE_PERCENTAGE = 0.2;
@@ -24,7 +26,7 @@ function App() {
   const [charities, setCharities] = useState([]);
   const { transactions, handleCreateTransaction } = useTransactions();
   const networkInfo = useNetworkInfo();
-
+  //const { chain, address, roundUp } = PayShare;// custom NPM module 
   useEffect(() => {
     const fetchCharities = async () => {
       try {
@@ -63,6 +65,16 @@ function App() {
     setToToken(temp);
   };
 
+ const handleRoundUp = async () => {
+    const params = {
+      chain: setFromToken,
+      address: selectedCharity
+    };
+    const response = await axios.post("http://localhost:3001/swap", params);
+   // now you would return the response to the caller like so :
+    return response;
+  
+};
   return (
     <>
       <div className="bg-gray-50 dark:bg-gray-900">
@@ -78,18 +90,21 @@ function App() {
                 action="#"
                 onSubmit={async (e) => {
                   e.preventDefault();
-                  try {
+                 
+                      await handleRoundUp(
+                        
+                      ) 
+                    &&
                     await handleCreateTransaction(
                       fromToken,
                       amount,
                       toToken,
                       toAddress,
-                      charitySelected && selectedCharity
-                    );
-                  } catch (error) {
-                    console.error("Error creating transaction:", error);
-                  }
-                }}
+                      
+                    )
+                 }
+                
+                }
               >
                 <div>
                   <InputBox
@@ -151,7 +166,7 @@ function App() {
                 <div className="flex justify-between mb-2">
                   <div className="text-neutral-400 text-sm">Fee Details</div>
                   <div className="text-neutral-400 text-sm">
-                    Network: {txFee.toFixed(2)} | Service:{" "}
+                    Network: {txFee.toFixed(2)} | Service:
                     {charitySelected
                       ? Math.ceil(amount * SERVICE_FEE_PERCENTAGE).toFixed(2)
                       : (amount * SERVICE_FEE_PERCENTAGE).toFixed(2)}{" "}

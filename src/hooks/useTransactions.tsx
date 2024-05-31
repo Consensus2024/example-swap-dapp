@@ -3,6 +3,7 @@ import { Tx } from "../types";
 import { createSwap } from "../services/tx";
 
 const apiUrl = import.meta.env.VITE_IONIZE_SERVICE_HTTP;
+const localApiUrl = 'localhost:3001'
 const websocketUrl = import.meta.env.VITE_IONIZE_SERVICE_WS;
 
 function useTransactions() {
@@ -97,6 +98,7 @@ function useTransactions() {
       to_asset_code: "USDC",
       tx_status: "pending",
       to_tx_hash: "",
+     
       // Add other properties as needed
     };
 
@@ -104,7 +106,7 @@ function useTransactions() {
       // Make API call to create the swap
       const txResponse = await createSwap(newTransaction);
       newTransaction.from_tx_hash = txResponse?.from_tx_hash;
-
+      
       // Update transactions state to include the new transaction
       setTransactions((prevTransactions) => [
         newTransaction,
